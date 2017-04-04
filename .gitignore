@@ -92,3 +92,4 @@ ENV/
 .data_cache
 data
 download
+.vector_cache
