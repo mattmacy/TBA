@@ -1,3 +1,5 @@
+import torch
+import torch.nn as nn
 import layers as L
 
 
@@ -65,7 +67,7 @@ class BIDAF(nn.Module):
         start = L.softmax3d(logits_start, a.max_num_sents, a.max_sent_size)
 
         # softmax of weights from start - not really explained in the paper
-       a1i = L.softsel(text_attn_enc_start.view(self.enc_start_shape),
+        a1i = L.softsel(text_attn_enc_start.view(self.enc_start_shape),
                            logits_start.view(self.logits_reshape))\
                            .unsqueeze(1).unsqueeze(1).repeat(1, a.max_num_sents, a.max_sent_size, 1)
 

@@ -1,6 +1,6 @@
 import os
 from argparse import ArgumentParser
-from .train import train
+from train import train
 
 def get_args():
     parser = ArgumentParser(description='PyTorch BIDAF model')
@@ -21,13 +21,13 @@ def get_args():
     parser.add_argument('--d_embed', type=int, default=300)
     parser.add_argument('--d_char_embed', type=int, default=8)
     parser.add_argument('--d_char_out', type=int, default=100)
-    parser.add_argument('--d_out_chan', type=string, default="100")
-    parser.add_argument('--d_char_filter', type=string, default="5")
+    parser.add_argument('--d_out_chan', type=str, default="100")
+    parser.add_argument('--d_char_filter', type=str, default="5")
 
     #Advanced training options
     parser.add_argument('--preserve-case', action='store_false', dest='lower')
-    parser.add_argument('--logit_func', type=string, default="tri_linear")
-    parser.add_argument('--answer_func', type=string, default="linear")
+    parser.add_argument('--logit_func', type=str, default="tri_linear")
+    parser.add_argument('--answer_func', type=str, default="linear")
     
     parser.add_argument('--n_layers', type=int, default=1)
     parser.add_argument('--log_every', type=int, default=50)
@@ -40,7 +40,7 @@ def get_args():
 
 def main():
     args = get_args()
-   train(args)
+    train(args)
 
 if __name__ == '__main__':
     main()

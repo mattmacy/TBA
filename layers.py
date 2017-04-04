@@ -26,7 +26,7 @@ def softmax3d(input, xd, yd):
 
 
 class HighwayLayer(nn.Module):
-    def __init__(self, size, bias_init=0.0, nonlin=nn.ReLU(inplace=true), gate_nonlin=nn.sigmoid()):
+    def __init__(self, size, bias_init=0.0, nonlin=nn.ReLU(inplace=True), gate_nonlin=F.sigmoid):
         super(HighwayLayer, self).__init__()
 
         self.nonlin = nonlin
@@ -115,7 +115,7 @@ class TFLinear(nn.Module):
     def __init__(self, input_size, output_size, func, do_p=0.2):
         if func == 'linear':
             self.main = __Linear(input_size, output_size, do_p)
-        elif func == 'trilinear'
+        elif func == 'trilinear':
             self.main = __TriLinear(input_size, output_size, do_p)
         else:
             assert False
