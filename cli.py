@@ -28,6 +28,7 @@ def get_args():
     parser.add_argument('--preserve-case', action='store_false', dest='lower')
     parser.add_argument('--logit_func', type=str, default="tri_linear")
     parser.add_argument('--answer_func', type=str, default="linear")
+    parser.add_argument('--n_hway_layers', type=int, default=2)
     
     parser.add_argument('--n_layers', type=int, default=1)
     parser.add_argument('--log_every', type=int, default=50)
