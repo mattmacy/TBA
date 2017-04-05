@@ -140,7 +140,7 @@ class BiEncoder(nn.Module):
         return outputs
 
 
-class FixedEmbbeding(nn.Embedding):
+class FixedEmbedding(nn.Embedding):
     def forward(input):
         out = super(FixedEmbedding, self).forward(input)
         return Variable(out.data)
