@@ -8,26 +8,26 @@ class BIDAF(nn.Module):
         super(BIDAF, self).__init__()
 
         batch_size, d_hidden = args.batch_size, args.d_hidden
-        max_num_sents, max_size_sents = args.max_num_sents, args.max_size_sents
-        max_q_size, max_word_size = args.max_q_size, args.max_word_size
+        max_num_sents, max_sent_size = args.max_num_sents, args.max_sent_size
+        max_ques_size, max_word_size = args.max_ques_size, args.max_word_size
         word_vocab_size, char_vocab_size = args.word_vocab_size, args.char_vocab_size
-        char_emb_size, word_emb_size = args.char_emb_size, args.word_emb_size
-        char_out_size = args.char_out_size
+        d_char_embed, d_embed = args.d_char_embed, args.d_embed
+        d_char_out = args.d_char_out
 
-        seq_in_size = 4*hidden_size
+        seq_in_size = 4*d_hidden
         lin_config = [seq_in_size]*2
-        self.char_embed = L.FixedEmbedding(char_vocab_size, char_emb_size)
-        self.word_embed = L.FixedEmbedding(word_vocab_size, word_emb_size)
-        self.h_net = L.HighwayNet(word_emb_size, args.n_hway_layers)
-        self.pre_encoder = L.BiEncoder(word_embed_size, args)
+        self.char_embed = L.FixedEmbedding(char_vocab_size, d_char_embed)
+        self.word_embed = L.FixedEmbedding(word_vocab_size, d_embed)
+        self.h_net = L.HighwayNet(d_embed, args.n_hway_layers)
+        #self.pre_encoder = L.BiEncoder(word_embed_size, args)
         self.attend = L.BiAttention(size, args)
-        self.start_encoder0 = L.BiEncoder(word_embed_size, args)
-        self.start_encoder1 = L.BiEncoder(word_embed_size, args)
-        self.end_encoder = L.BiEncoder(word_embed_size, args)
+        #self.start_encoder0 = L.BiEncoder(word_embed_size, args)
+        #self.start_encoder1 = L.BiEncoder(word_embed_size, args)
+        #self.end_encoder = L.BiEncoder(word_embed_size, args)
         self.lin_start = L.TFLinear(lin_config, args.answer_func)
         self.lin_end = L.TFLinear(lin_config, args.answer_func)
 
-        self.enc_start_shape = (batch_size, max_num_sents * max_sent_size, hidden_size * 2)
+        self.enc_start_shape = (batch_size, max_num_sents * max_sent_size, d_hidden * 2)
         self.logits_reshape = (batch_size, max_num_sents * max_sent_size)
         self.args = args
 
