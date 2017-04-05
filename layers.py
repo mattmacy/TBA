@@ -77,9 +77,9 @@ class Conv1dN(nn.Module):
         return self.main(x)
 
 
-class _Linear(nn.Module):
+class LinearBase(nn.Module):
     def __init__(self, input_size, output_size, do_p=0.2):
-        super(_Linear, self).__init__()
+        super(LinearBase, self).__init__()
         self.do = nn.Dropout(do_p)
         self.lin = nn.Linear(input_size, output_size)
         self.input_size = input_size
@@ -93,7 +93,7 @@ class _Linear(nn.Module):
         return shape, a_, b_
 
 
-class __Linear(_Linear):
+class Linear(LinearBase):
     def forward(self, a, b, mask):
         shape, a_, b_ = super(self).forward(a, b, mask)
         input = torch.cat((a_, b__), 1)
@@ -102,7 +102,7 @@ class __Linear(_Linear):
         return exp_mask(out, mask)
 
 
-class __TriLinear(_Linear):
+class TriLinear(LinearBase):
     def forward(self, a, b, mask):
         shape, a_, b_ = super(self).forward(a, b, mask)
         input = torch.cat((a_, b_, a_*b_), 1)
@@ -113,10 +113,11 @@ class __TriLinear(_Linear):
 
 class TFLinear(nn.Module):
     def __init__(self, input_size, output_size, func, do_p=0.2):
+        super(TFLinear, self).__init__()
         if func == 'linear':
-            self.main = __Linear(input_size, output_size, do_p)
+            self.main = Linear(input_size, output_size, do_p)
         elif func == 'trilinear':
-            self.main = __TriLinear(input_size, output_size, do_p)
+            self.main = TriLinear(input_size, output_size, do_p)
         else:
             assert False
 
