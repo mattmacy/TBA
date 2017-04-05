@@ -6,9 +6,10 @@ from torchtext import data, datasets
 
 def train(config):
     context, answer, span = data.Field(), data.Field(), data.Field()
-    train, dev, test = datasets.SQUAD.splits(context, answer, span)
+    train, dev, test = datasets.SQUAD.splits(context, answer, span, config=config)
     print("building context vocab")
     context.build_vocab(train, dev)
+    train.config.word_vocab_size = len(context.vocab)
 
     if os.path.isfile(config.vector_cache):
         context.vocab.vectors = torch.load(config.vector_cache)
@@ -17,4 +18,4 @@ def train(config):
         os.makedirs(os.path.dirname(config.vector_cache), exist_ok=True)
         torch.save(context.vocab.vectors, config.vector_cache)
 
-    model = BIDAF(config)
+    model = BIDAF(train.config)
