@@ -25,6 +25,20 @@ def softmax3d(input, xd, yd):
     return out
 
 
+def reduce_max(input_tensor, axis):
+    _, values = input_tensor.max(axis)
+    return values
+
+
+def span_loss(config, q_mask, start, end):
+    size = config.max_num_sents * config.max_sent_size
+    loss_mask = reduce_mask(q_mask, 1)
+    losses_start = nn.CrossEntropyLoss(logits_start, start.view(-1, size))
+    ce_loss_start = torch.mean(loss_mask * losses)
+    losses_end = nn.CrossEntropyLoss(logits_end, end.view(-1, size))
+    ce_loss_end = torch.mean(loss_mean)
+
+
 class HighwayLayer(nn.Module):
     def __init__(self, size, bias_init=0.0, nonlin=nn.ReLU(inplace=True), gate_nonlin=F.sigmoid):
         super(HighwayLayer, self).__init__()

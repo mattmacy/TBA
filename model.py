@@ -20,12 +20,12 @@ class BIDAF(nn.Module):
         self.word_embed = L.FixedEmbedding(word_vocab_size, d_embed)
         self.h_net = L.HighwayNet(d_embed, args.n_hway_layers)
         #self.pre_encoder = L.BiEncoder(word_embed_size, args)
-        self.attend = L.BiAttention(size, args)
+        #self.attend = L.BiAttention(size, args)
         #self.start_encoder0 = L.BiEncoder(word_embed_size, args)
         #self.start_encoder1 = L.BiEncoder(word_embed_size, args)
         #self.end_encoder = L.BiEncoder(word_embed_size, args)
-        self.lin_start = L.TFLinear(lin_config, args.answer_func)
-        self.lin_end = L.TFLinear(lin_config, args.answer_func)
+        self.lin_start = L.TFLinear(*lin_config, args.answer_func)
+        self.lin_end = L.TFLinear(*lin_config, args.answer_func)
 
         self.enc_start_shape = (batch_size, max_num_sents * max_sent_size, d_hidden * 2)
         self.logits_reshape = (batch_size, max_num_sents * max_sent_size)
@@ -38,7 +38,7 @@ class BIDAF(nn.Module):
         ctext_embed = self.char_embed(ctext)
         cquery_embed = self.char_embed(cquery)
         ctext_embed = self.conv(ctext_embed)
-        cquery_embef = self.conv(cquery_embed)
+        cquery_embed = self.conv(cquery_embed)
 
         # Word Embedding Layer
         text_embed = self.word_embed(text)
