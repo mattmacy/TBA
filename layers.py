@@ -30,13 +30,14 @@ def reduce_max(input_tensor, axis):
     return values
 
 
-def span_loss(config, q_mask, start, end):
+def span_loss(config, q_mask, logits_start, start, logits_end, end):
     size = config.max_num_sents * config.max_sent_size
     loss_mask = reduce_mask(q_mask, 1)
     losses_start = nn.CrossEntropyLoss(logits_start, start.view(-1, size))
     ce_loss_start = torch.mean(loss_mask * losses)
     losses_end = nn.CrossEntropyLoss(logits_end, end.view(-1, size))
     ce_loss_end = torch.mean(loss_mean)
+    return ce_loss_end - ce_loss_start
 
 
 class HighwayLayer(nn.Module):
